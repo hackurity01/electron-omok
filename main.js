@@ -75,6 +75,7 @@ function createIndexWindow() {
 	indexWindow.on('closed', function () {
 		indexWindow = null;
 	});
+	indexWindow.webContents.openDevTools();
 }
 
 electron.ipcMain.on('open-error-dialog', (event) => {
