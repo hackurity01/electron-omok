@@ -7,7 +7,7 @@ const http = require('http').Server(express);
 const io = require('socket.io')(http);
 const config = require('../../../config/config');
 
-http.listen(port, function(){
+http.listen(port, '0.0.0.0', function(){
 	console.log('listening on' + port);
 });
 
