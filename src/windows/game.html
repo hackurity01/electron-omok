@@ -1,0 +1,132 @@
+<style>
+    .dim {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #dddddd;
+        z-index: 10;
+        display: none;
+    }
+    .dim .dim-title {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    .table-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    .line {
+        border-collapse: collapse;
+    }
+
+    .line tr {
+
+    }
+
+    .line td {
+        width: 40px;
+        height: 40px;
+    }
+
+    .line, .line th, .line td {
+        border: 1px solid black;
+    }
+
+    .board {
+        position: absolute;
+        border-collapse: collapse;
+        top: 0;
+        left: 0;
+    }
+
+    .board tr {
+
+    }
+
+    .board td {
+        width: 40px;
+        height: 40px;
+    }
+
+    .board, .board th, .board td {
+        border: 1px solid #e40c04;
+    }
+
+    .white-stone {
+        background-color: #dddddd;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 50%;
+    }
+
+    .black-stone {
+        background-color: #111111;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 50%;
+    }
+</style>
+<div id="dim" class="dim"><div class="dim-title"></div></div>
+<div id="my-stone"></div>
+<div class="table-wrapper">
+   <!-- <table class="line">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <table class="board">
+        <tr>
+            <td id="pos-00" data-x="0" data-y="0"></td>
+            <td id="pos-10" data-x="1" data-y="0"></td>
+            <td id="pos-20" data-x="2" data-y="0"></td>
+            <td id="pos-30" data-x="3" data-y="0"></td>
+        </tr>
+        <tr>
+            <td id="pos-01" data-x="0" data-y="1"></td>
+            <td id="pos-11" data-x="1" data-y="1"></td>
+            <td id="pos-21" data-x="2" data-y="1"></td>
+            <td id="pos-31" data-x="3" data-y="1"></td>
+        </tr>
+        <tr>
+            <td id="pos-02" data-x="0" data-y="2"></td>
+            <td id="pos-12" data-x="1" data-y="2"></td>
+            <td id="pos-22" data-x="2" data-y="2"></td>
+            <td id="pos-32" data-x="3" data-y="2"></td>
+        </tr>
+        <tr>
+            <td id="pos-03" data-x="0" data-y="3"></td>
+            <td id="pos-13" data-x="1" data-y="3"></td>
+            <td id="pos-23" data-x="2" data-y="3"></td>
+            <td id="pos-33" data-x="3" data-y="3"></td>
+        </tr>
+    </table>-->
+</div>
+<script>
+
+
+	require('../renderer-process/game.js');
+</script>

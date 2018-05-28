@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <style>
+        html, body {
+            background-color: #DCD6B4;
+            font-size: 16px;
+        }
+
+        header {
+            height: 50px;
+            text-align: center;
+        }
+
+        contents {
+            height: 550px;
+            display: flex;
+            flex-direction: column;
+            padding: 5rem;
+            box-sizing: border-box;
+        }
+
+        contents button {
+            background: none;
+            border: 2px solid #789895;
+            color: #789895;
+            font-size: 1.2rem;
+        }
+
+        contents input[type="text"] {
+            background: none;
+            border: 2px solid #789895;
+            color: #789895;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        내 IP : <span id="my-ip"></span>
+    </header>
+    <contents>
+        <button type="button" id="btn-create-game">게임 만들기</button>
+        <input type="text" id="input-ip"/>
+        <button type="button" id="btn-join-game">게임 요청하기</button>
+    </contents>
+
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+		const {ipcRenderer} = require('electron');
+		let os = require('os');
+
+		let interfaces = os.networkInterfaces();
+		console.log(interfaces['en0'][1].address);
+		document.querySelector("#my-ip").innerHTML = interfaces['en0'][1].address;
+
+		const btnCreateGame = document.querySelector('#btn-create-game');
+		const btnJoinGame = document.querySelector('#btn-join-game');
+
+		btnCreateGame.addEventListener('click', (event) => {
+			ipcRenderer.send('create-game');
+		});
+
+		btnJoinGame.addEventListener('click', (event) => {
+			let ip = document.querySelector('#input-ip').value;
+			if(!/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip.split(":")[0])) {
+				ipcRenderer.send('open-error-dialog');
+				return false;
+			}
+			ipcRenderer.send('join-game', ip);
+		});
+
+
+		/* requires
+        -------------------*/
+		require('../renderer-process/index.js');
+    </script>
+</body>
+</html>

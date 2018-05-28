@@ -1,60 +1,152 @@
-const electron = require('electron')
-// Module to control application life.
-const app = electron.app
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+const config = require('./config/config');
 
-const path = require('path')
-const url = require('url')
+const path = require('path');
+const url = require('url');
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
 
-function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+const ioClient = require('socket.io-client');
+let socketClient = null;
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+//const socketClient = require('./src/main-process/socket/socket-client');
+const socketServer = require('./src/main-process/socket/socket');
+//import * as ioClient from 'socket.io-client';
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+const port = process.env.port;
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
-}
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
 
-// Quit when all windows are closed.
+// app life cycle
+app.on('ready', createWindow);
+
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
+});
 
 app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+	if (indexWindow === null) {
+		createWindow();
+	}
+});
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+
+// main-process import
+//const index = require('./src/main-process/index');
+//const game = require('./src/main-process/game');
+
+
+function createWindow() {
+	createIndexWindow();
+
+/*	electron.ipcMain.on('create-window', (event, msg) => {
+		switch (msg) {
+			case 'game':
+				game.createGameWindow();
+				break;
+			default:
+				return;
+		}
+	});*/
+
+}
+
+
+/* index
+ ------------------*/
+
+let indexWindow = null;
+
+function createIndexWindow() {
+	indexWindow = new BrowserWindow({
+		width: 400,
+		minWidth: 400,
+		maxWidth: 400,
+		height: 600,
+		minHeight: 600,
+		maxHeight: 600,
+	});
+
+	indexWindow.loadURL(path.join('file://', __dirname, 'src/windows/index.html'));
+
+	indexWindow.on('closed', function () {
+		indexWindow = null;
+	});
+}
+
+electron.ipcMain.on('open-error-dialog', (event) => {
+	electron.dialog.showErrorBox('IP 주소 오류!', '올바른 IP 주소를 입력해주세요.')
+});
+
+electron.ipcMain.on('join-game', (event, ip) => {
+	socketConnect('http://' + ip);
+
+	//socketClient.subscribeGameEvent(game);
+	socketClient.on('start-game', function(msg){
+		createGameWindow(msg);
+	});
+
+	socketClient.emit('join-game');
+});
+
+electron.ipcMain.on('create-game', (event) => {
+	console.log('on create-game');
+	socketServer.initSocketServer();
+	socketConnect('http://127.0.0.1:' + port);
+
+	//socketClient.subscribeGameEvent(game);
+	socketClient.on('start-game', function(msg){
+		createGameWindow(msg);
+	});
+
+	socketClient.emit('create-game');
+});
+
+
+
+/* game
+ ------------------*/
+
+let gameWindow = null;
+let myColor = null;
+
+function createGameWindow(color) {
+	myColor = color;
+	gameWindow = new BrowserWindow({width: 400, height: 320});
+
+	gameWindow.on('close', () => {
+		gameWindow = null;
+	});
+	gameWindow.loadURL(path.join('file://', __dirname, 'src/windows/game.html'));
+	gameWindow.show();
+
+	gameWindow.openDevTools();
+
+	socketClient.on('put-stone', function (msg) {
+		gameWindow.webContents.send('put-stone', msg);
+		console.log("put-stone", msg);
+	});
+}
+
+electron.ipcMain.on('game-window-did-finish-load', (event) => {
+	console.log("did finish load");
+	gameWindow.webContents.send('set-color', myColor);
+	gameWindow.webContents.send('set-board', config.BOARD_SIZE);
+});
+
+electron.ipcMain.on('put-stone', (event, msg) => {
+	console.log('put-stone', msg, socketClient);
+	socketClient.emit('put-stone', msg);
+});
+
+
+
+
+
+
+function socketConnect(url) {
+	socketClient = ioClient.connect(url);
+}
