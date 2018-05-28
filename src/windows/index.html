@@ -53,8 +53,11 @@
 		let os = require('os');
 
 		let interfaces = os.networkInterfaces();
-		console.log(interfaces['en0'][1].address);
-		document.querySelector("#my-ip").innerHTML = interfaces['en0'][1].address;
+		console.log(interfaces)
+
+		///console.log(interfaces['en0'][1].address);
+        let ip = findIp(interfaces);
+		document.querySelector("#my-ip").innerHTML = ip;
 
 		const btnCreateGame = document.querySelector('#btn-create-game');
 		const btnJoinGame = document.querySelector('#btn-join-game');
@@ -72,6 +75,17 @@
 			ipcRenderer.send('join-game', ip);
 		});
 
+		function findIp(interfaces){
+		    for (key in interfaces){
+		        for ( a in interfaces[key]) {
+		            if( !interfaces[key][a].internal && interfaces[key][a].family=="IPv4"){
+		                return interfaces[key][a].address
+                    }
+                }
+            }
+
+            return "127.0.0.1";
+        }
 
 		/* requires
         -------------------*/
