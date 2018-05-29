@@ -1,4 +1,5 @@
 const {ipcRenderer} = require('electron');
+const thisWindow = require('electron').remote.getCurrentWindow()
 const whiteStone = '<div class="white-stone"></div>';
 const blackStone = '<div class="black-stone"></div>';
 let myColor = '';
@@ -79,7 +80,6 @@ ipcRenderer.on('set-color', (event, color) => {
 			turn = false;
 		}
 	}
-	document.querySelector('#my-stone').innerHTML = myColor;
 });
 
 ipcRenderer.on('set-board', (event, size) => {
@@ -87,10 +87,19 @@ ipcRenderer.on('set-board', (event, size) => {
 });
 
 ipcRenderer.on('put-stone', (event, msg) => {
-	if(myColor === msg.color)
+	if(myColor === msg.color){
+		//ipcRenderer.send('noti-my-turn', myColor);
 		turn = false;
-	else
+	} else {
 		turn = true;
+
+		const myNotification = new window.Notification(myColor + ", It's your turn.");
+
+		myNotification.onclick = () => {
+			thisWindow.focus()
+		}
+	}
+
 	document.querySelector('#pos-' + msg.x + msg.y).innerHTML = (msg.color === 'black' ? blackStone : whiteStone);
 
 	if(msg.result !== 0) {

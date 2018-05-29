@@ -18,7 +18,7 @@ function createGameWindow(color) {
 	gameWindow.loadURL(path.join('file://', __dirname, '../windows/game.html'));
 	gameWindow.show();
 
-	gameWindow.openDevTools();
+	//gameWindow.openDevTools();
 
 }
 

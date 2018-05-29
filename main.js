@@ -2,7 +2,6 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const config = require('./config/config');
-
 const path = require('path');
 const url = require('url');
 
@@ -71,7 +70,7 @@ function createIndexWindow() {
 	indexWindow.on('closed', function () {
 		indexWindow = null;
 	});
-	indexWindow.webContents.openDevTools();
+	//indexWindow.webContents.openDevTools();
 }
 
 electron.ipcMain.on('index-window-did-finish-load', (event) => {
@@ -117,7 +116,11 @@ let myColor = null;
 
 function createGameWindow(color) {
 	myColor = color;
-	gameWindow = new BrowserWindow({width: 900, height: 900});
+	gameWindow = new BrowserWindow({
+		width: 840,
+		height: 860,
+		title: color,
+	});
 
 	gameWindow.on('close', () => {
 		gameWindow = null;
@@ -142,6 +145,11 @@ electron.ipcMain.on('game-window-did-finish-load', (event) => {
 electron.ipcMain.on('put-stone', (event, msg) => {
 	console.log('put-stone', msg, socketClient);
 	socketClient.emit('put-stone', msg);
+});
+
+
+electron.ipcMain.on('noti-my-turn', (event, color) => {
+
 });
 
 
