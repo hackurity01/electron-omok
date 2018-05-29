@@ -63,11 +63,7 @@ let indexWindow = null;
 function createIndexWindow() {
 	indexWindow = new BrowserWindow({
 		width: 400,
-		minWidth: 400,
-		maxWidth: 400,
 		height: 600,
-		minHeight: 600,
-		maxHeight: 600,
 	});
 
 	indexWindow.loadURL(path.join('file://', __dirname, 'src/windows/index.html'));
@@ -77,6 +73,11 @@ function createIndexWindow() {
 	});
 	indexWindow.webContents.openDevTools();
 }
+
+electron.ipcMain.on('index-window-did-finish-load', (event) => {
+	indexWindow.webContents.send('set-port', port)
+});
+
 
 electron.ipcMain.on('open-error-dialog', (event) => {
 	electron.dialog.showErrorBox('IP 주소 오류!', '올바른 IP 주소를 입력해주세요.')
@@ -116,7 +117,7 @@ let myColor = null;
 
 function createGameWindow(color) {
 	myColor = color;
-	gameWindow = new BrowserWindow({width: 400, height: 320});
+	gameWindow = new BrowserWindow({width: 900, height: 900});
 
 	gameWindow.on('close', () => {
 		gameWindow = null;

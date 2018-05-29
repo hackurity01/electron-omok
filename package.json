@@ -20,6 +20,7 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
+    "electron-prompt": "^0.5.0",
     "express": "^4.16.3",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1"

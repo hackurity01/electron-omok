@@ -2,15 +2,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>OMOK</title>
     <style>
         html, body {
-            background-color: #DCD6B4;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            width:100%;
+            height: 100%;
+        }
+
+        * {
+            font-family: "Apple SD Gothic Neo";
+            color: #789895;
             font-size: 16px;
         }
 
+        nav, section {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        nav { width: 400px; padding-top: 30px;}
+
+
+
         header {
-            height: 50px;
+            height:90px;
             text-align: center;
         }
 
@@ -21,71 +41,42 @@
             padding: 5rem;
             box-sizing: border-box;
         }
+        contents > * {
+            border:0;
+            text-align: center;
+        }
 
         contents button {
-            background: none;
-            border: 2px solid #789895;
-            color: #789895;
+            background: #789895;
+            color:#fff;
             font-size: 1.2rem;
+            padding: 0.7rem;
+            border-radius: 0.3rem;
+            margin:0.5rem;
         }
 
         contents input[type="text"] {
             background: none;
-            border: 2px solid #789895;
-            color: #789895;
             font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
-    <header>
-        내 IP : <span id="my-ip"></span>
-    </header>
-    <contents>
-        <button type="button" id="btn-create-game">게임 만들기</button>
-        <input type="text" id="input-ip"/>
-        <button type="button" id="btn-join-game">게임 요청하기</button>
-    </contents>
+
+    <nav>
+        <header>
+            <h1 style="font-size: 78px; margin-bottom: 0;">OMOK</h1>
+            <h4 style=" margin-top: -15px;">by Buzzni</h4>
+        </header>
+        <contents>
+            <div>My IP : <span id="my-ip"></span></div>
+            <button type="button" id="btn-create-game">Create a Game</button>
+            <button type="button" id="btn-join-game">Connect a Game</button>
+        </contents>
+    </nav>
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-		const {ipcRenderer} = require('electron');
-		let os = require('os');
-
-		let interfaces = os.networkInterfaces();
-		console.log(interfaces)
-
-		///console.log(interfaces['en0'][1].address);
-        let ip = findIp(interfaces);
-		document.querySelector("#my-ip").innerHTML = ip;
-
-		const btnCreateGame = document.querySelector('#btn-create-game');
-		const btnJoinGame = document.querySelector('#btn-join-game');
-
-		btnCreateGame.addEventListener('click', (event) => {
-			ipcRenderer.send('create-game');
-		});
-
-		btnJoinGame.addEventListener('click', (event) => {
-			let ip = document.querySelector('#input-ip').value;
-			if(!/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip.split(":")[0])) {
-				ipcRenderer.send('open-error-dialog');
-				return false;
-			}
-			ipcRenderer.send('join-game', ip);
-		});
-
-		function findIp(interfaces){
-		    for (key in interfaces){
-		        for ( a in interfaces[key]) {
-		            if( !interfaces[key][a].internal && interfaces[key][a].family=="IPv4"){
-		                return interfaces[key][a].address
-                    }
-                }
-            }
-
-            return "127.0.0.1";
-        }
 
 		/* requires
         -------------------*/

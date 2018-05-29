@@ -1,4 +1,13 @@
+<head>
+    <meta charset="UTF-8">
+    <title>BLACK</title>
+</head>
 <style>
+    html, body { padding: 0; margin: 0; background: #ffdddc
+    }
+
+    * { font-family: "Apple SD Gothic Neo"; cursor: pointer;}
+
     .dim {
         position: absolute;
         top: 0;
@@ -6,7 +15,7 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background-color: #dddddd;
+        background-color: rgba(0,0,0,0.4);
         z-index: 10;
         display: none;
     }
@@ -16,6 +25,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         font-size: 2em;
+        color:#fff;
         font-weight: bold;
     }
 
@@ -38,7 +48,8 @@
     }
 
     .line, .line th, .line td {
-        border: 1px solid black;
+        border: 1px solid rgba(110, 27, 29, 0.53);
+        box-sizing: border-box;
     }
 
     .board {
@@ -58,11 +69,13 @@
     }
 
     .board, .board th, .board td {
-        border: 1px solid #e40c04;
+        border: 1px solid transparent;
+        box-sizing: border-box;
     }
 
     .white-stone {
-        background-color: #dddddd;
+        background: linear-gradient(#fff, #eee);
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         width: 100%;
         height: 100%;
         border: 0;
@@ -70,7 +83,8 @@
     }
 
     .black-stone {
-        background-color: #111111;
+        background: linear-gradient(#666, #222);
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         width: 100%;
         height: 100%;
         border: 0;
@@ -126,7 +140,5 @@
     </table>-->
 </div>
 <script>
-
-
 	require('../renderer-process/game.js');
 </script>
