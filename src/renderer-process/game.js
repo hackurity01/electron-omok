@@ -56,7 +56,6 @@ function createBoard(size) {
 
 function win(color) {
 	let text = (color === 'black' ? "흑돌" : "백돌") + " 승";
-	//alert((color === 'black' ? "흑돌" : "백돌") + " 승");
 	document.querySelector('#dim').style.display = 'block';
 	document.querySelector('#dim .dim-title').innerHTML = text;
 }
@@ -88,13 +87,11 @@ ipcRenderer.on('set-board', (event, size) => {
 
 ipcRenderer.on('put-stone', (event, msg) => {
 	if(myColor === msg.color){
-		//ipcRenderer.send('noti-my-turn', myColor);
 		turn = false;
 	} else {
 		turn = true;
 
 		const myNotification = new window.Notification(myColor + ", It's your turn.");
-
 		myNotification.onclick = () => {
 			thisWindow.focus()
 		}

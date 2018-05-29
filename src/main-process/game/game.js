@@ -9,16 +9,8 @@ class Game {
 	constructor(size) {
 		this.size = size;
 		this.board = [...Array(size)].map(x => new Array(size).fill(0));
-		//this.myColor = color;
-		//this.opponentColor = (color === 1 ? 2 : 1);
 		this.player = {'black': null, 'white': null};
-	}
-
-	getColor(c) {
-		return this.color;
-	}
-	setColor(color) {
-		this.color = color;
+		this.goal = config.GOAL;
 	}
 
 	setPlayer(color, id) {
@@ -37,7 +29,6 @@ class Game {
 		let board = this.board;
 		let color = 0;
 		let count = 0;
-		let goal = 3;
 		let x = 0, y = 0;
 
 		console.log(1);
@@ -55,13 +46,12 @@ class Game {
 					color = board[x][y];
 				}
 
-				if(count === goal) {
+				if(count === this.goal) {
 					return color;
 				}
 			}
 		}
 
-		console.log(2);
 		for(x=0; x<this.size; x++) {
 			count = 0;
 			color = 0;
@@ -76,7 +66,7 @@ class Game {
 					color = board[x][y];
 				}
 
-				if(count === goal) {
+				if(count === this.goal) {
 					return color;
 				}
 			}
@@ -100,7 +90,7 @@ class Game {
 				color = board[x][y];
 			}
 
-			if(count === goal) {
+			if(count === this.goal) {
 				return color;
 			}
 
@@ -138,7 +128,7 @@ class Game {
 				color = board[x][y];
 			}
 
-			if(count === goal) {
+			if(count === this.goal) {
 				return color;
 			}
 

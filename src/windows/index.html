@@ -8,8 +8,8 @@
             background-color: #ffffff;
             margin: 0;
             padding: 0;
-            width:100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
         }
 
         * {
@@ -24,40 +24,101 @@
             padding: 0;
         }
 
-
-        nav { width: 400px; padding-top: 30px;}
-
-
+        nav {
+            width: 400px;
+            padding-top: 30px;
+        }
 
         header {
-            height:100px;
+            height: 100px;
             text-align: center;
         }
 
         contents {
-            height: 550px;
             display: flex;
             flex-direction: column;
             padding: 5rem;
             box-sizing: border-box;
         }
+
         contents > * {
-            border:0;
+            border: 0;
             text-align: center;
         }
 
         contents button {
             background: #789895;
-            color:#fff;
+            color: #fff;
             font-size: 1.2rem;
             padding: 0.7rem;
             border-radius: 0.3rem;
-            margin:0.5rem;
+            margin: 0.5rem;
         }
 
         contents input[type="text"] {
             background: none;
             font-size: 1.2rem;
+        }
+
+        .spinner {
+            color: white;
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .spinner:after {
+            animation: changeContent .8s linear infinite;
+            display: block;
+            content: "⠋";
+            font-size: 100px;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner:before {
+            content: "Please Wait";
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+        }
+
+        @keyframes changeContent {
+            10% {
+                content: "⠙";
+            }
+            20% {
+                content: "⠹";
+            }
+            30% {
+                content: "⠸";
+            }
+            40% {
+                content: "⠼";
+            }
+            50% {
+                content: "⠴";
+            }
+            60% {
+                content: "⠦";
+            }
+            70% {
+                content: "⠧";
+            }
+            80% {
+                content: "⠇";
+            }
+            90% {
+                content: "⠏";
+            }
         }
     </style>
 </head>
@@ -74,8 +135,7 @@
             <button type="button" id="btn-join-game">Connect a Game</button>
         </contents>
     </nav>
-
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <div class="spinner"></div>
     <script>
 
 		/* requires

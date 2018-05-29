@@ -1,24 +1,22 @@
 const electron = require('electron');
-const app = electron.app;
+const {app, globalShortcut} = electron;
 const BrowserWindow = electron.BrowserWindow;
 const config = require('./config/config');
 const path = require('path');
-const url = require('url');
-
 
 const ioClient = require('socket.io-client');
 let socketClient = null;
 
-//const socketClient = require('./src/main-process/socket/socket-client');
 const socketServer = require('./src/main-process/socket/socket');
-//import * as ioClient from 'socket.io-client';
 
 const port = process.env.port;
 
 
-
 // app life cycle
-app.on('ready', createWindow);
+app.on('ready', () => {
+	createIndexWindow();
+	globalShortcut.register('CommandOrControl+R', () => {});
+});
 
 app.on('window-all-closed', function () {
 	if (process.platform !== 'darwin') {
@@ -28,30 +26,10 @@ app.on('window-all-closed', function () {
 
 app.on('activate', function () {
 	if (indexWindow === null) {
-		createWindow();
+		createIndexWindow();
 	}
 });
 
-
-// main-process import
-//const index = require('./src/main-process/index');
-//const game = require('./src/main-process/game');
-
-
-function createWindow() {
-	createIndexWindow();
-
-/*	electron.ipcMain.on('create-window', (event, msg) => {
-		switch (msg) {
-			case 'game':
-				game.createGameWindow();
-				break;
-			default:
-				return;
-		}
-	});*/
-
-}
 
 
 /* index
@@ -83,9 +61,8 @@ electron.ipcMain.on('open-error-dialog', (event) => {
 });
 
 electron.ipcMain.on('join-game', (event, ip) => {
-	socketConnect('http://' + ip);
+	socketClient = ioClient.connect('http://' + ip);
 
-	//socketClient.subscribeGameEvent(game);
 	socketClient.on('start-game', function(msg){
 		createGameWindow(msg);
 	});
@@ -96,9 +73,8 @@ electron.ipcMain.on('join-game', (event, ip) => {
 electron.ipcMain.on('create-game', (event) => {
 	console.log('on create-game');
 	socketServer.initSocketServer();
-	socketConnect('http://127.0.0.1:' + port);
+	socketClient = ioClient.connect('http://127.0.0.1:' + port);
 
-	//socketClient.subscribeGameEvent(game);
 	socketClient.on('start-game', function(msg){
 		createGameWindow(msg);
 	});
@@ -128,7 +104,8 @@ function createGameWindow(color) {
 	gameWindow.loadURL(path.join('file://', __dirname, 'src/windows/game.html'));
 	gameWindow.show();
 
-	gameWindow.openDevTools();
+	//gameWindow.openDevTools();
+	indexWindow.close();
 
 	socketClient.on('put-stone', function (msg) {
 		gameWindow.webContents.send('put-stone', msg);
@@ -146,17 +123,3 @@ electron.ipcMain.on('put-stone', (event, msg) => {
 	console.log('put-stone', msg, socketClient);
 	socketClient.emit('put-stone', msg);
 });
-
-
-electron.ipcMain.on('noti-my-turn', (event, color) => {
-
-});
-
-
-
-
-
-
-function socketConnect(url) {
-	socketClient = ioClient.connect(url);
-}

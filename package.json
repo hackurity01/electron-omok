@@ -1,21 +1,18 @@
 {
-  "name": "electron-quick-start",
+  "name": "electron-omok",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "electron omok game by buzzni",
   "main": "main.js",
   "scripts": {
     "start": "electron . --port process.env.port || 8080"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/hackurity01/electron-omok",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Buzzni",
+    "Omok"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Buzzni",
   "devDependencies": {
     "electron": "^2.0.0"
   },
