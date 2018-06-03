@@ -41,14 +41,17 @@ function createIndexWindow() {
 	indexWindow = new BrowserWindow({
 		width: 400,
 		height: 600,
+		title: 'OMOK',
+		resizable: false
 	});
 
-	indexWindow.loadURL(path.join('file://', __dirname, 'src/windows/index.html'));
+	indexWindow.loadURL(
+		path.join('file://', __dirname, 'src/windows/index.html')
+	);
 
 	indexWindow.on('closed', function () {
 		indexWindow = null;
 	});
-	//indexWindow.webContents.openDevTools();
 }
 
 electron.ipcMain.on('index-window-did-finish-load', (event) => {
@@ -96,6 +99,7 @@ function createGameWindow(color) {
 		width: 840,
 		height: 860,
 		title: color,
+		resizable: false
 	});
 
 	gameWindow.on('close', () => {

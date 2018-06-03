@@ -1,5 +1,5 @@
 const {ipcRenderer} = require('electron');
-const thisWindow = require('electron').remote.getCurrentWindow()
+const thisWindow = require('electron').remote.getCurrentWindow();
 const whiteStone = '<div class="white-stone"></div>';
 const blackStone = '<div class="black-stone"></div>';
 let myColor = '';
@@ -93,7 +93,7 @@ ipcRenderer.on('put-stone', (event, msg) => {
 
 		const myNotification = new window.Notification(myColor + ", It's your turn.");
 		myNotification.onclick = () => {
-			thisWindow.focus()
+			thisWindow.focus();
 		}
 	}
 
